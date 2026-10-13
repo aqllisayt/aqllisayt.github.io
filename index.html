@@ -73,6 +73,7 @@
       min-height: 50px;
       font-size: 16px;
       color: #222;
+      white-space: pre-wrap;
     }
   </style>
 </head>
@@ -170,7 +171,8 @@
       </select>
     </div>
 
-    <textarea id="inputText" placeholder="Matnni buring..."></textarea>
+    <!-- Xato to'g'irlandi: "buring" o'rniga "kiriting" yozildi -->
+    <textarea id="inputText" placeholder="Matnni kiriting..."></textarea>
     <button onclick="translateText()">Tarjima qilish</button>
 
     <div class="result-box" id="outputText">Tarjima bu yerda chiqadi...</div>
@@ -193,7 +195,16 @@
       try {
         const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(text)}`);
         const data = await res.json();
-        output.innerText = data[0][0][0];
+        
+        // Ba'zida tarjima bir nechta qismga bo'linib kelishi mumkin, ularni to'liq birlashtirish:
+        let translatedText = "";
+        if (data && data[0]) {
+          data[0].forEach(item => {
+            if (item[0]) translatedText += item[0];
+          });
+        }
+        
+        output.innerText = translatedText || "Tarjima topilmadi.";
       } catch (error) {
         output.innerText = "Xatolik yuz berdi. Qayta urinib ko'ring.";
       }
