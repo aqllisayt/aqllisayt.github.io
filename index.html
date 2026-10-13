@@ -1,238 +1,43 @@
-<!DOCTYPE html>
-<html lang="uz">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TezTranslate — Tezkor Tarjimon va Lotin-Kirill O'giruvchi</title>
-<meta name="description" content="TezTranslate — matnlarni tezkor tarjima qilish va lotin-kirill alifbosida o'girish xizmati.">
-<meta name="keywords" content="TezTranslate, tez translate, tarjimon, lotin kirill, o'giruvchi, uzbek translate">
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f4f6f9;
-            margin: 0;
-            padding: 20px;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-        }
-        .container {
-            width: 100%;
-            max-width: 600px;
-            background: #ffffff;
-            padding: 20px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            box-sizing: border-box;
-        }
-        h1 {
-            text-align: center;
-            color: #1e293b;
-            font-size: 24px;
-            margin-top: 0;
-            margin-bottom: 5px;
-        }
-        p.subtitle {
-            text-align: center;
-            color: #64748b;
-            font-size: 14px;
-            margin-bottom: 20px;
-        }
-        .mode-box {
-            margin-bottom: 15px;
-        }
-        .selectors {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 15px;
-            gap: 10px;
-        }
-        select, button {
-            width: 100%;
-            padding: 12px;
-            font-size: 15px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            outline: none;
-            box-sizing: border-box;
-        }
-        textarea {
-            width: 100%;
-            height: 130px;
-            padding: 12px;
-            font-size: 16px;
-            border-radius: 8px;
-            border: 1px solid #cbd5e1;
-            resize: none;
-            box-sizing: border-box;
-            margin-bottom: 15px;
-        }
-        button {
-            background-color: #2563eb;
-            color: white;
-            border: none;
-            cursor: pointer;
-            font-weight: bold;
-            font-size: 16px;
-            transition: background 0.2s;
-            margin-bottom: 15px;
-        }
-        button:hover {
-            background-color: #1d4ed8;
-        }
-        .output-box {
-            background: #f8fafc;
-            padding: 12px;
-            border: 1px solid #e2e8f0;
-            border-radius: 8px;
-            min-height: 90px;
-            font-size: 16px;
-            white-space: pre-wrap;
-            word-break: break-word;
-            color: #0f172a;
-        }
-        label {
-            font-weight: bold;
-            font-size: 14px;
-            color: #334155;
-            display: block;
-            margin-bottom: 5px;
-        }
-    </style>
-</head>
-<body>
-
-<div class="container">
-    <h1>TezTranslate by Javohir</h1>
-    <p class="subtitle">Butun dunyo tillari tarjimoni va Lotin-Kirill o'giruvchi</p>
-
-    <div class="mode-box">
-        <label>Xizmat turini tanlang:</label>
-        <select id="modeSelect">
-            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google)</option>
-            <option value="lat_kir">🔤 Lotin ➔ Kirill (O'zbekcha)</option>
-            <option value="kir_lat">🔤 Kirill ➔ Lotin (O'zbekcha)</option>
-        </select>
-    </div>
-
-    <div id="apiLangSelectors" class="selectors">
-        <select id="fromLang">
-            <option value="uz">O'zbekcha</option>
-            <option value="en">Inglizcha (English)</option>
-            <option value="ru">Ruscha (Русский)</option>
-            <option value="tr">Turkcha (Türkçe)</option>
-            <option value="ar">Arabcha (العربية)</option>
-            <option value="de">Nemischa (Deutsch)</option>
-            <option value="fr">Fransuzcha (Français)</option>
-            <option value="es">Ispancha (Español)</option>
-            <option value="zh">Xitoycha (中文)</option>
-            <option value="ko">Koreyscha (한국어)</option>
-        </select>
-
-        <span style="font-size: 18px; font-weight: bold;">➔</span>
-
-        <select id="toLang">
-            <option value="en">Inglizcha (English)</option>
-            <option value="uz">O'zbekcha</option>
-            <option value="ru">Ruscha (Русский)</option>
-            <option value="tr">Turkcha (Türkçe)</option>
-            <option value="ar">Arabcha (العربية)</option>
-            <option value="de">Nemischa (Deutsch)</option>
-            <option value="fr">Fransuzcha (Français)</option>
-            <option value="es">Ispancha (Español)</option>
-            <option value="zh">Xitoycha (中文)</option>
-            <option value="ko">Koreyscha (한국어)</option>
-        </select>
-    </div>
-
-    <textarea id="inputText" placeholder="Matnni shu yerga kiriting..."></textarea>
-    <button id="actionBtn">Tarjima qilish / O'girish</button>
-
-    <label>Natija:</label>
-    <div id="outputText" class="output-box">Natija shu yerda chiqadi...</div>
-</div>
-
-<script>
-    const latinToCyrillicMap = {
-        'Sh': 'Ш', 'sh': 'ш', 'Ch': 'Ч', 'ch': 'ч', 'Yu': 'Ю', 'yu': 'ю',
-        'Ya': 'Я', 'ya': 'я', "O'": 'Ў', "o'": 'ў', "G'": 'Ғ', "g'": 'ғ',
-        'A': 'А', 'a': 'а', 'B': 'Б', 'b': 'б', 'D': 'Д', 'd': 'д',
-        'E': 'Э', 'e': 'э', 'F': 'Ф', 'f': 'ф', 'G': 'Г', 'g': 'г',
-        'H': 'Ҳ', 'h': 'ҳ', 'I': 'И', 'i': 'и', 'J': 'Ж', 'j': 'ж',
-        'K': 'Қ', 'k': 'қ', 'L': 'Л', 'l': 'л', 'M': 'М', 'm': 'м',
-        'N': 'Н', 'n': 'н', 'O': 'О', 'o': 'о', 'P': 'П', 'p': 'п',
-        'Q': 'Қ', 'q': 'қ', 'R': 'Р', 'r': 'р', 'S': 'С', 's': 'с',
-        'T': 'Т', 't': 'т', 'U': 'У', 'u': 'у', 'V': 'В', 'v': 'в',
-        'X': 'Х', 'x': 'х', 'Y': 'Й', 'y': 'й', 'Z': 'З', 'z': 'з',
-        "'": 'ъ'
-    };
-
-    const cyrillicToLatinMap = Object.fromEntries(
-        Object.entries(latinToCyrillicMap).map(([k, v]) => [v, k])
-    );
-
-    function transliterate(text, type) {
-        if (type === 'lat_kir') {
-            let res = text.replace(/O\'|o\'|G\'|g\'|Sh|sh|Ch|ch|Yu|yu|Ya|ya/g, match => latinToCyrillicMap[match] || match);
-            return res.split('').map(char => latinToCyrillicMap[char] || char).join('');
-        } else {
-            let res = text;
-            for (let [k, v] of Object.entries(cyrillicToLatinMap)) {
-                res = res.split(k).join(v);
-            }
-            return res;
-        }
-    }
-
-    const modeSelect = document.getElementById('modeSelect');
-    const apiLangSelectors = document.getElementById('apiLangSelectors');
-
-    modeSelect.addEventListener('change', () => {
-        if (modeSelect.value === 'api_translate') {
-            apiLangSelectors.style.display = 'flex';
-        } else {
-            apiLangSelectors.style.display = 'none';
-        }
-    });
-
-    document.getElementById('actionBtn').addEventListener('click', async () => {
-        const text = document.getElementById('inputText').value;
-        const mode = modeSelect.value;
-        const outputDiv = document.getElementById('outputText');
-
-        if (!text.trim()) {
-            outputDiv.innerText = "Iltimos, matn kiriting!";
-            return;
-        }
-
-        if (mode === 'lat_kir' || mode === 'kir_lat') {
-            outputDiv.innerText = transliterate(text, mode);
-        } else if (mode === 'api_translate') {
-            const from = document.getElementById('fromLang').value;
-            const to = document.getElementById('toLang').value;
-            outputDiv.innerText = "Tarjima qilinmoqda...";
-
-            try {
-                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
-                const response = await fetch(url);
-                const data = await response.json();
-                
-                if (data && data[0]) {
-                    let translatedText = '';
-                    data[0].forEach(item => {
-                        if (item[0]) translatedText += item[0];
-                    });
-                    outputDiv.innerText = translatedText;
-                } else {
-                    outputDiv.innerText = "Tarjima topilmadi.";
-                }
-            } catch (err) {
-                outputDiv.innerText = "Tarjimada xatolik yuz berdi. Iltimos, qayta urinib ko'ring.";
-            }
-        }
-    });
-</script>
-
-</body>
-</html>
+<select id="sourceLang">
+  <option value="auto">Автоопределение (Auto-detect)</option>
+  <option value="uz" selected>O'zbekcha (Узбекский)</option>
+  <option value="en">English (Английский)</option>
+  <option value="ru">Русский</option>
+  <option value="tr">Türkçe (Турецкий)</option>
+  <option value="ar">العربية (Арабский)</option>
+  <option value="zh-CN">中文 (Китайский)</option>
+  <option value="es">Español (Испанский)</option>
+  <option value="de">Deutsch (Немецкий)</option>
+  <option value="fr">Français (Французский)</option>
+  <option value="ko">한국어 (Корейский)</option>
+  <option value="ja">日本語 (Японский)</option>
+  <option value="hi">हिन्दी (Хинди)</option>
+  <option value="it">Italiano (Итальянский)</option>
+  <option value="pt">Português (Португальский)</option>
+  <option value="fa">فارسی (Персидский)</option>
+  <option value="ur">اردو (Урду)</option>
+  <option value="bn">বাংলা (Бенгальский)</option>
+  <option value="ms">Bahasa Melayu (Малайский)</option>
+  <option value="id">Bahasa Indonesia (Индонезийский)</option>
+  <option value="vi">Tiếng Việt (Вьетнамский)</option>
+  <option value="th">ไทย (Тайский)</option>
+  <option value="pl">Polski (Польский)</option>
+  <option value="nl">Nederlands (Нидерландский)</option>
+  <option value="uk">Українська (Украинский)</option>
+  <option value="kk">Қазақша (Казахский)</option>
+  <option value="ky">Кыргызча (Киргизский)</option>
+  <option value="tg">Тоҷикӣ (Таджикский)</option>
+  <option value="tk">Türkmençe (Туркменский)</option>
+  <option value="az">Azərbaycan (Азербайджанский)</option>
+  <option value="hy">Հայերեն (Армянский)</option>
+  <option value="ka">ქართული (Грузинский)</option>
+  <option value="he">עברית (Иврит)</option>
+  <option value="el">Ελληνικά (Греческий)</option>
+  <option value="sv">Svenska (Шведский)</option>
+  <option value="no">Norsk (Норвежский)</option>
+  <option value="fi">Suomi (Финский)</option>
+  <option value="cs">Čeština (Чешский)</option>
+  <option value="hu">Magyar (Венгерский)</option>
+  <option value="ro">Română (Румынский)</option>
+  <option value="bg">Български (Болгарский)</option>
+</select>
