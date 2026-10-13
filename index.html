@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AqlliSayt.uz | Lotin Kirill o'giruvchi</title>
+<style>
+  body{font-family:sans-serif;margin:0;background:#f4f6fb;color:#1a1a2e}
+  .wrap{max-width:600px;margin:0 auto;padding:20px 16px}
+  h1{font-size:24px;margin:10px 0 4px}
+  p.sub{margin:0 0 16px;color:#555}
+  select,textarea,button{width:100%;box-sizing:border-box;font-size:16px;border-radius:10px;border:1px solid #ccd;padding:12px;margin-bottom:12px}
+  textarea{height:140px;resize:vertical;background:#fff}
+  #out{background:#eef3ff}
+  button{background:#2f5bea;color:#fff;border:none;font-weight:bold}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>AqlliSayt.uz</h1>
+  <p class="sub">Lotin ⇄ Kirill matn o'giruvchi (bepul)</p>
+  <select id="mode">
+    <option value="lc">Lotin → Kirill</option>
+    <option value="cl">Kirill → Lotin</option>
+  </select>
+  <textarea id="inp" placeholder="Matnni shu yerga yozing..."></textarea>
+  <textarea id="out" readonly placeholder="Natija shu yerda chiqadi"></textarea>
+  <button id="copy">Nusxa olish</button>
+</div>
+<script>
+const L2C={"sh":"ш","ch":"ч","o'":"ў","g'":"ғ","yo":"ё","yu":"ю","ya":"я","ye":"е",
+"a":"а","b":"б","d":"д","e":"е","f":"ф","g":"г","h":"ҳ","i":"и","j":"ж","k":"к","l":"л",
+"m":"м","n":"н","o":"о","p":"п","q":"қ","r":"р","s":"с","t":"т","u":"у","v":"в","x":"х","y":"й","z":"з"};
+const C2L={"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"j","з":"z","и":"i","й":"y",
+"к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"x",
+"ц":"ts","ч":"ch","ш":"sh","ъ":"'","ы":"i","э":"e","ю":"yu","я":"ya","ў":"o'","қ":"q","ғ":"g'","ҳ":"h"};
+const isLetter=c=>c&&c.toLowerCase()!==c.toUpperCase();
+const isUp=c=>c!==c.toLowerCase();
+function latToCyr(t){
+  t=t.replace(/[‘’ʼ`´]/g,"'");
+  let o="";
+  for(let i=0;i<t.length;){
+    const c=t[i], two=t.substr(i,2).toLowerCase();
+    if(two.length===2&&L2C[two]){
+      const r=L2C[two]; o+=isUp(c)?r.toUpperCase():r; i+=2; continue;
+    }
+    const l=c.toLowerCase();
+    if(l==="e"&&!isLetter(t[i-1])&&t[i-1]!=="'"){ o+=isUp(c)?"Э":"э"; i++; continue; }
+    if(L2C[l]){ const r=L2C[l]; o+=isUp(c)?r.toUpperCase():r; }
+    else o+=c;
+    i++;
+  }
+  return o;
+}
+function cyrToLat(t){
+  let o="";
+  for(let i=0;i<t.length;i++){
+    const c=t[i], l=c.toLowerCase();
+    let r=C2L[l];
+    if(l==="е"&&!isLetter(t[i-1])) r="ye";
+    if(!r){ o+=c; continue; }
+    if(isUp(c)){
+      const n=t[i+1];
+      r=(r.length>1&&n&&isUp(n))?r.toUpperCase():r.charAt(0).toUpperCase()+r.slice(1);
+    }
+    o+=r;
+  }
+  return o;
+}
+const inp=document.getElementById("inp"),out=document.getElementById("out"),mode=document.getElementById("mode");
+function run(){ out.value=(mode.value==="lc"?latToCyr:cyrToLat)(inp.value); }
+inp.addEventListener("input",run); mode.addEventListener("change",run);
+document.getElementById("copy").addEventListener("click",()=>{
+  out.select(); try{navigator.clipboard.writeText(out.value);}catch(e){document.execCommand("copy");}
+});
+</script>
+</body>
+</html>
