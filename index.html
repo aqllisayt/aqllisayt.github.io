@@ -1,78 +1,168 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AqlliSayt.uz | Lotin Kirill o'giruvchi</title>
-<style>
-  body{font-family:sans-serif;margin:0;background:#f4f6fb;color:#1a1a2e}
-  .wrap{max-width:600px;margin:0 auto;padding:20px 16px}
-  h1{font-size:24px;margin:10px 0 4px}
-  p.sub{margin:0 0 16px;color:#555}
-  select,textarea,button{width:100%;box-sizing:border-box;font-size:16px;border-radius:10px;border:1px solid #ccd;padding:12px;margin-bottom:12px}
-  textarea{height:140px;resize:vertical;background:#fff}
-  #out{background:#eef3ff}
-  button{background:#2f5bea;color:#fff;border:none;font-weight:bold}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AqlliSayt.uz - Dunyo tillari tarjimoni va Transliteratsiya</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            width: 100%;
+            max-width: 600px;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            box-sizing: border-box;
+        }
+        h1 {
+            text-align: center;
+            color: #1e293b;
+            font-size: 24px;
+            margin-top: 0;
+            margin-bottom: 5px;
+        }
+        p.subtitle {
+            text-align: center;
+            color: #64748b;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .mode-box {
+            margin-bottom: 15px;
+        }
+        .selectors {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            gap: 10px;
+        }
+        select, button {
+            width: 100%;
+            padding: 12px;
+            font-size: 15px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            outline: none;
+            box-sizing: border-box;
+        }
+        textarea {
+            width: 100%;
+            height: 130px;
+            padding: 12px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #cbd5e1;
+            resize: none;
+            box-sizing: border-box;
+            margin-bottom: 15px;
+        }
+        button {
+            background-color: #2563eb;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 16px;
+            transition: background 0.2s;
+            margin-bottom: 15px;
+        }
+        button:hover {
+            background-color: #1d4ed8;
+        }
+        .output-box {
+            background: #f8fafc;
+            padding: 12px;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            min-height: 90px;
+            font-size: 16px;
+            white-space: pre-wrap;
+            word-break: break-word;
+            color: #0f172a;
+        }
+        label {
+            font-weight: bold;
+            font-size: 14px;
+            color: #334155;
+            display: block;
+            margin-bottom: 5px;
+        }
+    </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>AqlliSayt.uz</h1>
-  <p class="sub">Lotin ⇄ Kirill matn o'giruvchi (bepul)</p>
-  <select id="mode">
-    <option value="lc">Lotin → Kirill</option>
-    <option value="cl">Kirill → Lotin</option>
-  </select>
-  <textarea id="inp" placeholder="Matnni shu yerga yozing..."></textarea>
-  <textarea id="out" readonly placeholder="Natija shu yerda chiqadi"></textarea>
-  <button id="copy">Nusxa olish</button>
+
+<div class="container">
+    <h1>AqlliSayt.uz</h1>
+    <p class="subtitle">Butun dunyo tillari tarjimoni va Lotin-Kirill o'giruvchi</p>
+
+    <div class="mode-box">
+        <label>Xizmat turini tanlang:</label>
+        <select id="modeSelect">
+            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google / Universal)</option>
+            <option value="lat_kir">🔤 Lotin ➔ Kirill (O'zbekcha)</option>
+            <option value="kir_lat">🔤 Kirill ➔ Lotin (O'zbekcha)</option>
+        </select>
+    </div>
+
+    <!-- Dunyo tillari uchun tanlov menyusi -->
+    <div id="apiLangSelectors" class="selectors">
+        <select id="fromLang">
+            <option value="uz">O'zbekcha</option>
+            <option value="en">Inglizcha (English)</option>
+            <option value="ru">Ruscha (Русский)</option>
+            <option value="tr">Turkcha (Türkçe)</option>
+            <option value="ar">Arabcha (العربية)</option>
+            <option value="de">Nemischa (Deutsch)</option>
+            <option value="fr">Fransuzcha (Français)</option>
+            <option value="es">Ispancha (Español)</option>
+            <option value="zh">Xitoycha (中文)</option>
+            <option value="ko">Koreyscha (한국어)</option>
+        </select>
+
+        <span style="font-size: 18px; font-weight: bold;">➔</span>
+
+        <select id="toLang">
+            <option value="en">Inglizcha (English)</option>
+            <option value="uz">O'zbekcha</option>
+            <option value="ru">Ruscha (Русский)</option>
+            <option value="tr">Turkcha (Türkçe)</option>
+            <option value="ar">Arabcha (العربية)</option>
+            <option value="de">Nemischa (Deutsch)</option>
+            <option value="fr">Fransuzcha (Français)</option>
+            <option value="es">Ispancha (Español)</option>
+            <option value="zh">Xitoycha (中文)</option>
+            <option value="ko">Koreyscha (한국어)</option>
+        </select>
+    </div>
+
+    <textarea id="inputText" placeholder="Matnni shu yerga kiriting..."></textarea>
+    <button id="actionBtn">Tarjima qilish / O'girish</button>
+
+    <label>Natija:</label>
+    <div id="outputText" class="output-box">Natija shu yerda chiqadi...</div>
 </div>
+
 <script>
-const L2C={"sh":"ш","ch":"ч","o'":"ў","g'":"ғ","yo":"ё","yu":"ю","ya":"я","ye":"е",
-"a":"а","b":"б","d":"д","e":"е","f":"ф","g":"г","h":"ҳ","i":"и","j":"ж","k":"к","l":"л",
-"m":"м","n":"н","o":"о","p":"п","q":"қ","r":"р","s":"с","t":"т","u":"у","v":"в","x":"х","y":"й","z":"з"};
-const C2L={"а":"a","б":"b","в":"v","г":"g","д":"d","е":"e","ё":"yo","ж":"j","з":"z","и":"i","й":"y",
-"к":"k","л":"l","м":"m","н":"n","о":"o","п":"p","р":"r","с":"s","т":"t","у":"u","ф":"f","х":"x",
-"ц":"ts","ч":"ch","ш":"sh","ъ":"'","ы":"i","э":"e","ю":"yu","я":"ya","ў":"o'","қ":"q","ғ":"g'","ҳ":"h"};
-const isLetter=c=>c&&c.toLowerCase()!==c.toUpperCase();
-const isUp=c=>c!==c.toLowerCase();
-function latToCyr(t){
-  t=t.replace(/[‘’ʼ`´]/g,"'");
-  let o="";
-  for(let i=0;i<t.length;){
-    const c=t[i], two=t.substr(i,2).toLowerCase();
-    if(two.length===2&&L2C[two]){
-      const r=L2C[two]; o+=isUp(c)?r.toUpperCase():r; i+=2; continue;
-    }
-    const l=c.toLowerCase();
-    if(l==="e"&&!isLetter(t[i-1])&&t[i-1]!=="'"){ o+=isUp(c)?"Э":"э"; i++; continue; }
-    if(L2C[l]){ const r=L2C[l]; o+=isUp(c)?r.toUpperCase():r; }
-    else o+=c;
-    i++;
-  }
-  return o;
-}
-function cyrToLat(t){
-  let o="";
-  for(let i=0;i<t.length;i++){
-    const c=t[i], l=c.toLowerCase();
-    let r=C2L[l];
-    if(l==="е"&&!isLetter(t[i-1])) r="ye";
-    if(!r){ o+=c; continue; }
-    if(isUp(c)){
-      const n=t[i+1];
-      r=(r.length>1&&n&&isUp(n))?r.toUpperCase():r.charAt(0).toUpperCase()+r.slice(1);
-    }
-    o+=r;
-  }
-  return o;
-}
-const inp=document.getElementById("inp"),out=document.getElementById("out"),mode=document.getElementById("mode");
-function run(){ out.value=(mode.value==="lc"?latToCyr:cyrToLat)(inp.value); }
-inp.addEventListener("input",run); mode.addEventListener("change",run);
-document.getElementById("copy").addEventListener("click",()=>{
-  out.select(); try{navigator.clipboard.writeText(out.value);}catch(e){document.execCommand("copy");}
-});
-</script>
-</body>
-</html>
+    // Lotin va Kirill transliteratsiyasi
+    const latinToCyrillicMap = {
+        'Sh': 'Ш', 'sh': 'ш', 'Ch': 'Ч', 'ch': 'ч', 'Yu': 'Ю', 'yu': 'ю',
+        'Ya': 'Я', 'ya': 'я', "O'": 'Ў', "o'": 'ў', "G'": 'Ғ', "g'": 'ғ',
+        'A': 'А', 'a': 'а', 'B': 'Б', 'b': 'б', 'D': 'Д', 'd': 'д',
+        'E': 'Э', 'e': 'э', 'F': 'Ф', 'f': 'ф', 'G': 'Г', 'g': 'г',
+        'H': 'Ҳ', 'h': 'ҳ', 'I': 'И', 'i': 'и', 'J': 'Ж', 'j': 'ж',
+        'K': 'Қ', 'k': 'қ', 'L': 'Л', 'l': 'л', 'M': 'М', 'm': 'м',
+        'N': 'Н', 'n': 'н', 'O': 'О', 'o': 'о', 'P': 'П', 'p': 'п',
+        'Q': 'Қ', 'q': 'қ', 'R': 'Р', 'r': 'р', 'S': 'С', 's': 'с',
+        'T': 'Т', 't': 'т', 'U': 'У', 'u': 'у', 'V': 'В', 'v': 'в',
+        'X': 'Х', 'x': 'х', 'Y': 'Й', 'y': 'й', 'Z': 'З', 'z': 'з',
+        "'": 'ъ'
