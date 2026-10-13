@@ -108,7 +108,7 @@
     <div class="mode-box">
         <label>Xizmat turini tanlang:</label>
         <select id="modeSelect">
-            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google Translate)</option>
+            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google)</option>
             <option value="lat_kir">🔤 Lotin ➔ Kirill (O'zbekcha)</option>
             <option value="kir_lat">🔤 Kirill ➔ Lotin (O'zbekcha)</option>
         </select>
@@ -137,4 +137,100 @@
             <option value="tr">Turkcha (Türkçe)</option>
             <option value="ar">Arabcha (العربية)</option>
             <option value="de">Nemischa (Deutsch)</option>
-            <option value="fr">
+            <option value="fr">Fransuzcha (Français)</option>
+            <option value="es">Ispancha (Español)</option>
+            <option value="zh">Xitoycha (中文)</option>
+            <option value="ko">Koreyscha (한국어)</option>
+        </select>
+    </div>
+
+    <textarea id="inputText" placeholder="Matnni shu yerga kiriting..."></textarea>
+    <button id="actionBtn">Tarjima qilish / O'girish</button>
+
+    <label>Natija:</label>
+    <div id="outputText" class="output-box">Natija shu yerda chiqadi...</div>
+</div>
+
+<script>
+    const latinToCyrillicMap = {
+        'Sh': 'Ш', 'sh': 'ш', 'Ch': 'Ч', 'ch': 'ч', 'Yu': 'Ю', 'yu': 'ю',
+        'Ya': 'Я', 'ya': 'я', "O'": 'Ў', "o'": 'ў', "G'": 'Ғ', "g'": 'ғ',
+        'A': 'А', 'a': 'а', 'B': 'Б', 'b': 'б', 'D': 'Д', 'd': 'д',
+        'E': 'Э', 'e': 'э', 'F': 'Ф', 'f': 'ф', 'G': 'Г', 'g': 'г',
+        'H': 'Ҳ', 'h': 'ҳ', 'I': 'И', 'i': 'и', 'J': 'Ж', 'j': 'ж',
+        'K': 'Қ', 'k': 'қ', 'L': 'Л', 'l': 'л', 'M': 'М', 'm': 'м',
+        'N': 'Н', 'n': 'н', 'O': 'О', 'o': 'о', 'P': 'П', 'p': 'п',
+        'Q': 'Қ', 'q': 'қ', 'R': 'Р', 'r': 'р', 'S': 'С', 's': 'с',
+        'T': 'Т', 't': 'т', 'U': 'У', 'u': 'у', 'V': 'В', 'v': 'в',
+        'X': 'Х', 'x': 'х', 'Y': 'Й', 'y': 'й', 'Z': 'З', 'z': 'з',
+        "'": 'ъ'
+    };
+
+    const cyrillicToLatinMap = Object.fromEntries(
+        Object.entries(latinToCyrillicMap).map(([k, v]) => [v, k])
+    );
+
+    function transliterate(text, type) {
+        if (type === 'lat_kir') {
+            let res = text.replace(/O\'|o\'|G\'|g\'|Sh|sh|Ch|ch|Yu|yu|Ya|ya/g, match => latinToCyrillicMap[match] || match);
+            return res.split('').map(char => latinToCyrillicMap[char] || char).join('');
+        } else {
+            let res = text;
+            for (let [k, v] of Object.entries(cyrillicToLatinMap)) {
+                res = res.split(k).join(v);
+            }
+            return res;
+        }
+    }
+
+    const modeSelect = document.getElementById('modeSelect');
+    const apiLangSelectors = document.getElementById('apiLangSelectors');
+
+    modeSelect.addEventListener('change', () => {
+        if (modeSelect.value === 'api_translate') {
+            apiLangSelectors.style.display = 'flex';
+        } else {
+            apiLangSelectors.style.display = 'none';
+        }
+    });
+
+    document.getElementById('actionBtn').addEventListener('click', async () => {
+        const text = document.getElementById('inputText').value;
+        const mode = modeSelect.value;
+        const outputDiv = document.getElementById('outputText');
+
+        if (!text.trim()) {
+            outputDiv.innerText = "Iltimos, matn kiriting!";
+            return;
+        }
+
+        if (mode === 'lat_kir' || mode === 'kir_lat') {
+            outputDiv.innerText = transliterate(text, mode);
+        } else if (mode === 'api_translate') {
+            const from = document.getElementById('fromLang').value;
+            const to = document.getElementById('toLang').value;
+            outputDiv.innerText = "Tarjima qilinmoqda...";
+
+            try {
+                const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&q=${encodeURIComponent(text)}`;
+                const response = await fetch(url);
+                const data = await response.json();
+                
+                if (data && data[0]) {
+                    let translatedText = '';
+                    data[0].forEach(item => {
+                        if (item[0]) translatedText += item[0];
+                    });
+                    outputDiv.innerText = translatedText;
+                } else {
+                    outputDiv.innerText = "Tarjima topilmadi.";
+                }
+            } catch (err) {
+                outputDiv.innerText = "Tarjimada xatolik yuz berdi. Iltimos, qayta urinib ko'ring.";
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
