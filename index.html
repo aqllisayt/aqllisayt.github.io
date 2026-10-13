@@ -108,13 +108,12 @@
     <div class="mode-box">
         <label>Xizmat turini tanlang:</label>
         <select id="modeSelect">
-            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google / Universal)</option>
+            <option value="api_translate">🌐 Dunyo tillari tarjimoni (Google Translate)</option>
             <option value="lat_kir">🔤 Lotin ➔ Kirill (O'zbekcha)</option>
             <option value="kir_lat">🔤 Kirill ➔ Lotin (O'zbekcha)</option>
         </select>
     </div>
 
-    <!-- Dunyo tillari uchun tanlov menyusi -->
     <div id="apiLangSelectors" class="selectors">
         <select id="fromLang">
             <option value="uz">O'zbekcha</option>
@@ -138,31 +137,4 @@
             <option value="tr">Turkcha (Türkçe)</option>
             <option value="ar">Arabcha (العربية)</option>
             <option value="de">Nemischa (Deutsch)</option>
-            <option value="fr">Fransuzcha (Français)</option>
-            <option value="es">Ispancha (Español)</option>
-            <option value="zh">Xitoycha (中文)</option>
-            <option value="ko">Koreyscha (한국어)</option>
-        </select>
-    </div>
-
-    <textarea id="inputText" placeholder="Matnni shu yerga kiriting..."></textarea>
-    <button id="actionBtn">Tarjima qilish / O'girish</button>
-
-    <label>Natija:</label>
-    <div id="outputText" class="output-box">Natija shu yerda chiqadi...</div>
-</div>
-
-<script>
-    // Lotin va Kirill transliteratsiyasi
-    const latinToCyrillicMap = {
-        'Sh': 'Ш', 'sh': 'ш', 'Ch': 'Ч', 'ch': 'ч', 'Yu': 'Ю', 'yu': 'ю',
-        'Ya': 'Я', 'ya': 'я', "O'": 'Ў', "o'": 'ў', "G'": 'Ғ', "g'": 'ғ',
-        'A': 'А', 'a': 'а', 'B': 'Б', 'b': 'б', 'D': 'Д', 'd': 'д',
-        'E': 'Э', 'e': 'э', 'F': 'Ф', 'f': 'ф', 'G': 'Г', 'g': 'г',
-        'H': 'Ҳ', 'h': 'ҳ', 'I': 'И', 'i': 'и', 'J': 'Ж', 'j': 'ж',
-        'K': 'Қ', 'k': 'қ', 'L': 'Л', 'l': 'л', 'M': 'М', 'm': 'м',
-        'N': 'Н', 'n': 'н', 'O': 'О', 'o': 'о', 'P': 'П', 'p': 'п',
-        'Q': 'Қ', 'q': 'қ', 'R': 'Р', 'r': 'р', 'S': 'С', 's': 'с',
-        'T': 'Т', 't': 'т', 'U': 'У', 'u': 'у', 'V': 'В', 'v': 'в',
-        'X': 'Х', 'x': 'х', 'Y': 'Й', 'y': 'й', 'Z': 'З', 'z': 'з',
-        "'": 'ъ'
+            <option value="fr">
