@@ -1,43 +1,204 @@
-<select id="sourceLang">
-  <option value="auto">Автоопределение (Auto-detect)</option>
-  <option value="uz" selected>O'zbekcha (Узбекский)</option>
-  <option value="en">English (Английский)</option>
-  <option value="ru">Русский</option>
-  <option value="tr">Türkçe (Турецкий)</option>
-  <option value="ar">العربية (Арабский)</option>
-  <option value="zh-CN">中文 (Китайский)</option>
-  <option value="es">Español (Испанский)</option>
-  <option value="de">Deutsch (Немецкий)</option>
-  <option value="fr">Français (Французский)</option>
-  <option value="ko">한국어 (Корейский)</option>
-  <option value="ja">日本語 (Японский)</option>
-  <option value="hi">हिन्दी (Хинди)</option>
-  <option value="it">Italiano (Итальянский)</option>
-  <option value="pt">Português (Португальский)</option>
-  <option value="fa">فارسی (Персидский)</option>
-  <option value="ur">اردو (Урду)</option>
-  <option value="bn">বাংলা (Бенгальский)</option>
-  <option value="ms">Bahasa Melayu (Малайский)</option>
-  <option value="id">Bahasa Indonesia (Индонезийский)</option>
-  <option value="vi">Tiếng Việt (Вьетнамский)</option>
-  <option value="th">ไทย (Тайский)</option>
-  <option value="pl">Polski (Польский)</option>
-  <option value="nl">Nederlands (Нидерландский)</option>
-  <option value="uk">Українська (Украинский)</option>
-  <option value="kk">Қазақша (Казахский)</option>
-  <option value="ky">Кыргызча (Киргизский)</option>
-  <option value="tg">Тоҷикӣ (Таджикский)</option>
-  <option value="tk">Türkmençe (Туркменский)</option>
-  <option value="az">Azərbaycan (Азербайджанский)</option>
-  <option value="hy">Հայերեն (Армянский)</option>
-  <option value="ka">ქართული (Грузинский)</option>
-  <option value="he">עברית (Иврит)</option>
-  <option value="el">Ελληνικά (Греческий)</option>
-  <option value="sv">Svenska (Шведский)</option>
-  <option value="no">Norsk (Норвежский)</option>
-  <option value="fi">Suomi (Финский)</option>
-  <option value="cs">Čeština (Чешский)</option>
-  <option value="hu">Magyar (Венгерский)</option>
-  <option value="ro">Română (Румынский)</option>
-  <option value="bg">Български (Болгарский)</option>
-</select>
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TezTranslate by Javohir</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background-color: #f4f6f9;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .container {
+      max-width: 600px;
+      width: 100%;
+      background: #ffffff;
+      padding: 20px;
+      border-radius: 12px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+    h1 {
+      text-align: center;
+      color: #333;
+      font-size: 24px;
+      margin-bottom: 20px;
+    }
+    .lang-select {
+      display: flex;
+      gap: 10px;
+      margin-bottom: 15px;
+    }
+    select {
+      flex: 1;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 14px;
+    }
+    textarea {
+      width: 100%;
+      height: 120px;
+      padding: 10px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+      box-sizing: border-box;
+      resize: vertical;
+      margin-bottom: 15px;
+    }
+    button {
+      width: 100%;
+      padding: 12px;
+      background-color: #007bff;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+    button:hover {
+      background-color: #0056b3;
+    }
+    .result-box {
+      margin-top: 15px;
+      padding: 12px;
+      background: #eef2f5;
+      border-radius: 8px;
+      min-height: 50px;
+      font-size: 16px;
+      color: #222;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h1>TezTranslate by Javohir</h1>
+
+    <div class="lang-select">
+      <select id="sourceLang">
+        <option value="auto">Avto-aniqlash (Auto-detect)</option>
+        <option value="uz" selected>O'zbekcha</option>
+        <option value="en">Inglizcha (English)</option>
+        <option value="ru">Ruscha (Русский)</option>
+        <option value="tr">Turkcha (Türkçe)</option>
+        <option value="ar">Arabcha (العربية)</option>
+        <option value="zh-CN">Xitoycha (中文)</option>
+        <option value="es">Ispancha (Español)</option>
+        <option value="de">Nemischa (Deutsch)</option>
+        <option value="fr">Fransuzcha (Français)</option>
+        <option value="ko">Koreyscha (한국어)</option>
+        <option value="ja">Yaponcha (日本語)</option>
+        <option value="hi">Hindcha (Hindi)</option>
+        <option value="it">Italyancha (Italiano)</option>
+        <option value="pt">Portugalcha (Português)</option>
+        <option value="fa">Forscha (Persian)</option>
+        <option value="ur">Urducha</option>
+        <option value="bn">Bengali</option>
+        <option value="ms">Malaycha</option>
+        <option value="id">Indoneziyacha</option>
+        <option value="vi">Vyetnamcha</option>
+        <option value="th">Taycha</option>
+        <option value="pl">Polshacha</option>
+        <option value="nl">Gollandcha</option>
+        <option value="uk">Ukraincha</option>
+        <option value="kk">Qozoqcha</option>
+        <option value="ky">Qirg'izcha</option>
+        <option value="tg">Tojikcha</option>
+        <option value="tk">Turkmancha</option>
+        <option value="az">Ozarbayjoncha</option>
+        <option value="hy">Armancha</option>
+        <option value="ka">Gruzintcha</option>
+        <option value="he">Ivritcha</option>
+        <option value="el">Grekcha</option>
+        <option value="sv">Shvedcha</option>
+        <option value="no">Norvegcha</option>
+        <option value="fi">Fincha</option>
+        <option value="cs">Chexcha</option>
+        <option value="hu">Vengretcha</option>
+        <option value="ro">Rumincha</option>
+        <option value="bg">Bolgarcha</option>
+      </select>
+
+      <select id="targetLang">
+        <option value="en" selected>Inglizcha (English)</option>
+        <option value="uz">O'zbekcha</option>
+        <option value="ru">Ruscha (Русский)</option>
+        <option value="tr">Turkcha (Türkçe)</option>
+        <option value="ar">Arabcha (العربية)</option>
+        <option value="zh-CN">Xitoycha (中文)</option>
+        <option value="es">Ispancha (Español)</option>
+        <option value="de">Nemischa (Deutsch)</option>
+        <option value="fr">Fransuzcha (Français)</option>
+        <option value="ko">Koreyscha (한국어)</option>
+        <option value="ja">Yaponcha (日本語)</option>
+        <option value="hi">Hindcha (Hindi)</option>
+        <option value="it">Italyancha (Italiano)</option>
+        <option value="pt">Portugalcha (Português)</option>
+        <option value="fa">Forscha (Persian)</option>
+        <option value="ur">Urducha</option>
+        <option value="bn">Bengali</option>
+        <option value="ms">Malaycha</option>
+        <option value="id">Indoneziyacha</option>
+        <option value="vi">Vyetnamcha</option>
+        <option value="th">Taycha</option>
+        <option value="pl">Polshacha</option>
+        <option value="nl">Gollandcha</option>
+        <option value="uk">Ukraincha</option>
+        <option value="kk">Qozoqcha</option>
+        <option value="ky">Qirg'izcha</option>
+        <option value="tg">Tojikcha</option>
+        <option value="tk">Turkmancha</option>
+        <option value="az">Ozarbayjoncha</option>
+        <option value="hy">Armancha</option>
+        <option value="ka">Gruzintcha</option>
+        <option value="he">Ivritcha</option>
+        <option value="el">Grekcha</option>
+        <option value="sv">Shvedcha</option>
+        <option value="no">Norvegcha</option>
+        <option value="fi">Fincha</option>
+        <option value="cs">Chexcha</option>
+        <option value="hu">Vengretcha</option>
+        <option value="ro">Rumincha</option>
+        <option value="bg">Bolgarcha</option>
+      </select>
+    </div>
+
+    <textarea id="inputText" placeholder="Matnni buring..."></textarea>
+    <button onclick="translateText()">Tarjima qilish</button>
+
+    <div class="result-box" id="outputText">Tarjima bu yerda chiqadi...</div>
+  </div>
+
+  <script>
+    async function translateText() {
+      const text = document.getElementById('inputText').value;
+      const source = document.getElementById('sourceLang').value;
+      const target = document.getElementById('targetLang').value;
+      const output = document.getElementById('outputText');
+
+      if (!text.trim()) {
+        output.innerText = "Iltimos, matn kiriting!";
+        return;
+      }
+
+      output.innerText = "Tarjima qilinmoqda...";
+
+      try {
+        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(text)}`);
+        const data = await res.json();
+        output.innerText = data[0][0][0];
+      } catch (error) {
+        output.innerText = "Xatolik yuz berdi. Qayta urinib ko'ring.";
+      }
+    }
+  </script>
+
+</body>
+</html>
