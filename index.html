@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="b5b294053f189c5c3f743f7a7b177b2f">
     <title>TezTranslate by Javohir</title>
-    <!-- Tesseract.js kutubxonasi (rasmdan matn o'qish uchun) -->
+    <!-- Tesseract.js (распознавание текста с фото) -->
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
     <style>
         body {
@@ -45,12 +45,13 @@
             background-color: #007bff;
             color: white;
             border: none;
-            padding: 10px 15px;
+            padding: 12px 15px;
             border-radius: 8px;
             font-size: 16px;
             cursor: pointer;
             width: 100%;
             margin-bottom: 10px;
+            font-weight: bold;
         }
         button:hover { background-color: #0056b3; }
         .result-box {
@@ -61,6 +62,7 @@
             min-height: 50px;
             margin-top: 10px;
             word-break: break-word;
+            font-size: 16px;
         }
         #status { font-size: 14px; color: #666; text-align: center; margin-bottom: 10px; }
     </style>
@@ -68,14 +70,14 @@
 <body>
 
     <div class="container">
-        <h2>TezTranslate 🚀</h2>
+        <h2>TezTranslate by Javohir 🚀</h2>
         
-        <!-- Rasm yuklash qismi -->
+        <!-- Загрузка фото -->
         <label>Rasm yuklash yoki rasmga olish:</label>
         <input type="file" id="imageInput" accept="image/*">
         <p id="status"></p>
 
-        <!-- 40+ tillar ro'yxati -->
+        <!-- Выбор языка -->
         <label>Qaysi tilga tarjima qilish kerak:</label>
         <select id="targetLanguage">
             <option value="uz">O'zbekcha</option>
@@ -94,51 +96,4 @@
             <option value="ur">اردو (Urducha)</option>
             <option value="it">Italiano (Italyancha)</option>
             <option value="pt">Português (Portugalcha)</option>
-            <option value="kk">Қазақша ( Qozoqcha)</option>
-            <option value="ky">Кыргызча (Qirg'izcha)</option>
-            <option value="tg">Тоҷикӣ (Tojikcha)</option>
-            <option value="az">Azərbaycan (Ozarbayjoncha)</option>
-            <option value="uk">Українська (Ukraincha)</option>
-            <option value="pl">Polski (Polyakcha)</option>
-            <option value="nl">Nederlands (Gollandcha)</option>
-            <option value="el">Ελληνικά (Yunoncha)</option>
-            <option value="sv">Svenska (Shvedcha)</option>
-            <option value="no">Norsk (Norvegcha)</option>
-            <option value="fi">Suomi (Fincha)</option>
-            <option value="da">Dansk (Datcha)</option>
-            <option value="cs">Čeština (Chexcha)</option>
-            <option value="hu">Magyar (Vengercha)</option>
-            <option value="ro">Română (Rumincha)</option>
-            <option value="bg">Български (Bolgarcha)</option>
-            <option value="sr">Српски (Serbcha)</option>
-            <option value="hr">Hrvatski (Xorvatcha)</option>
-            <option value="sk">Slovenčina (Slovakcha)</option>
-            <option value="id">Bahasa Indonesia (Indonezcha)</option>
-            <option value="ms">Bahasa Melayu (Malaycha)</option>
-            <option value="vi">Tiếng Việt (Vyetnamcha)</option>
-            <option value="th">ไทย (Taycha)</option>
-            <option value="bn">বাংলা (Bengalcha)</option>
-            <option value="he">עברית (Ivrit)</option>
-        </select>
-
-        <!-- Matn kiritish qismi -->
-        <label>Tarjima qilinadigan matn:</label>
-        <textarea id="sourceText" placeholder="Matnni kiriting yoki rasmdan o'qing..."></textarea>
-        
-        <button onclick="translateText()">Tarjima qilish</button>
-
-        <!-- Natija qismi -->
-        <label>Natija:</label>
-        <div class="result-box" id="resultText">Tarjima bu yerda chiqadi...</div>
-
-        <!-- Ovoz bilan o'qish tugmasi -->
-        <button onclick="speakResult()" style="background-color: #28a745; margin-top: 15px;">🔊 Ovoz chiqarib o'qish</button>
-    </div>
-
-    <script>
-        // Rasm yuklanganda matnni avtomatik o'qib olish (OCR)
-        const imageInput = document.getElementById('imageInput');
-        const sourceText = document.getElementById('sourceText');
-        const status = document.getElementById('status');
-
-        imageInput.addEventListener('change', (e) => {
+            <option value="kk">Қазақша (Qozoqcha)</option
