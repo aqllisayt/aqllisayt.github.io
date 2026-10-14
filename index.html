@@ -58,19 +58,25 @@
   #speakBtn { background: #28a745; }
   button:disabled { opacity: 0.6; }
   #status { margin-top: 8px; font-size: 14px; color: #666; min-height: 18px; }
-  .insta {
-    position: fixed;
-    right: 14px;
-    bottom: 14px;
-    background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888);
+  .social {
+    max-width: 520px;
+    margin: 16px auto 8px;
+    display: flex;
+    gap: 12px;
+  }
+  .social a {
+    flex: 1;
+    text-align: center;
     color: #fff;
     text-decoration: none;
     font-weight: bold;
-    padding: 12px 18px;
+    padding: 14px 10px;
     border-radius: 30px;
     font-size: 17px;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
   }
+  .insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
+  .tg { background: #229ed9; }
 </style>
 </head>
 <body>
@@ -103,166 +109,12 @@
   <button id="speakBtn">🔊 Ovoz chiqarib o'qish</button>
 </div>
 
-<a class="insta" href="https://instagram.com/jokha.arm" target="_blank" rel="noopener">📷 @jokha.arm</a>
+<div class="social">
+  <a class="insta" href="https://instagram.com/jokha.arm" target="_blank" rel="noopener">📷 Instagram</a>
+  <a class="tg" href="https://t.me/ii7jb" target="_blank" rel="noopener">✈️ Telegram</a>
+</div>
 
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
-<script>
-  // kod | nomi | OCR kodi | ovoz kodi
-  var LANGS = [
-    ["uz", "O'zbekcha", "uzb", "uz-UZ"],
-    ["en", "Inglizcha", "eng", "en-US"],
-    ["ru", "Ruscha", "rus", "ru-RU"],
-    ["tr", "Turkcha", "tur", "tr-TR"],
-    ["ar", "Arabcha", "ara", "ar-SA"],
-    ["kk", "Qozoqcha", "kaz", "kk-KZ"],
-    ["ko", "Koreyscha", "kor", "ko-KR"],
-    ["zh-CN", "Xitoycha", "chi_sim", "zh-CN"],
-    ["de", "Nemischa", "deu", "de-DE"],
-    ["fr", "Fransuzcha", "fra", "fr-FR"],
-    ["es", "Ispancha", "spa", "es-ES"]
-  ];
 
-  var fromSel = document.getElementById("fromLang");
-  var toSel = document.getElementById("toLang");
-  var inputText = document.getElementById("inputText");
-  var resultBox = document.getElementById("result");
-  var statusBox = document.getElementById("status");
-  var translateBtn = document.getElementById("translateBtn");
 
-  LANGS.forEach(function (l) {
-    fromSel.add(new Option(l[1], l[0]));
-    toSel.add(new Option(l[1], l[0]));
-  });
-  fromSel.value = "uz";
-  toSel.value = "en";
-
-  function langInfo(code) {
-    return LANGS.filter(function (l) { return l[0] === code; })[0];
-  }
-
-  // Matnni bo'laklarga bo'lish (uzun matn uchun)
-  function splitText(text, maxLen) {
-    var parts = [];
-    var sentences = text.match(/[^.!?\n]+[.!?\n]*/g) || [text];
-    var current = "";
-    sentences.forEach(function (s) {
-      if ((current + s).length > maxLen && current) {
-        parts.push(current);
-        current = "";
-      }
-      while (s.length > maxLen) {
-        parts.push(s.slice(0, maxLen));
-        s = s.slice(maxLen);
-      }
-      current += s;
-    });
-    if (current.trim()) parts.push(current);
-    return parts;
-  }
-
-  // 1-usul: Google
-  async function googleTranslate(text, from, to) {
-    var url = "https://translate.googleapis.com/translate_a/single?client=gtx&dt=t" +
-      "&sl=" + encodeURIComponent(from) +
-      "&tl=" + encodeURIComponent(to) +
-      "&q=" + encodeURIComponent(text);
-    var r = await fetch(url);
-    if (!r.ok) throw new Error("google xato");
-    var d = await r.json();
-    return d[0].map(function (x) { return x[0]; }).join("");
-  }
-
-  // 2-usul (zaxira): MyMemory
-  async function myMemoryTranslate(text, from, to) {
-    var url = "https://api.mymemory.translated.net/get?q=" + encodeURIComponent(text) +
-      "&langpair=" + encodeURIComponent(from + "|" + to);
-    var r = await fetch(url);
-    if (!r.ok) throw new Error("mymemory xato");
-    var d = await r.json();
-    if (!d.responseData || !d.responseData.translatedText) throw new Error("mymemory bo'sh");
-    return d.responseData.translatedText;
-  }
-
-  async function translatePart(text, from, to) {
-    try {
-      return await googleTranslate(text, from, to);
-    } catch (e1) {
-      return await myMemoryTranslate(text, from, to);
-    }
-  }
-
-  async function doTranslate() {
-    var text = inputText.value.trim();
-    var from = fromSel.value;
-    var to = toSel.value;
-
-    if (!text) {
-      statusBox.textContent = "Avval matn yozing.";
-      return;
-    }
-    if (from === to) {
-      resultBox.textContent = text;
-      statusBox.textContent = "";
-      return;
-    }
-
-    translateBtn.disabled = true;
-    statusBox.textContent = "Tarjima qilinmoqda...";
-    resultBox.textContent = "";
-
-    try {
-      var parts = splitText(text, 1000);
-      var out = [];
-      for (var i = 0; i < parts.length; i++) {
-        out.push(await translatePart(parts[i], from, to));
-      }
-      resultBox.textContent = out.join("");
-      statusBox.textContent = "";
-    } catch (e) {
-      statusBox.textContent = "Tarjima qilib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.";
-    }
-    translateBtn.disabled = false;
-  }
-
-  translateBtn.addEventListener("click", doTranslate);
-
-  // Rasmdan matn o'qish
-  document.getElementById("imageInput").addEventListener("change", async function (e) {
-    var file = e.target.files[0];
-    if (!file) return;
-    var ocrLang = langInfo(fromSel.value)[2];
-    statusBox.textContent = "Rasmdan matn o'qilmoqda... (biroz kuting)";
-    try {
-      var res = await Tesseract.recognize(file, ocrLang);
-      var text = (res.data.text || "").trim();
-      if (text) {
-        inputText.value = text;
-        statusBox.textContent = "Matn o'qildi. Endi «Tarjima qilish» ni bosing.";
-      } else {
-        statusBox.textContent = "Rasmdan matn topilmadi. Aniqroq rasm tanlang.";
-      }
-    } catch (err) {
-      statusBox.textContent = "Rasmni o'qib bo'lmadi. Qayta urinib ko'ring.";
-    }
-  });
-
-  // Ovoz chiqarib o'qish
-  document.getElementById("speakBtn").addEventListener("click", function () {
-    var text = resultBox.textContent.trim();
-    if (!text) {
-      statusBox.textContent = "Avval tarjima qiling.";
-      return;
-    }
-    if (!window.speechSynthesis) {
-      statusBox.textContent = "Bu brauzer ovozni qo'llamaydi.";
-      return;
-    }
-    window.speechSynthesis.cancel();
-    var u = new SpeechSynthesisUtterance(text);
-    u.lang = langInfo(toSel.value)[3];
-    window.speechSynthesis.speak(u);
-  });
-</script>
-</body>
-</html>
 
