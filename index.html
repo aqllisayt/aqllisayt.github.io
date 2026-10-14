@@ -5,7 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="b5b294053f189c5c3f743f7a7b177b2f">
     <title>TezTranslate by Javohir</title>
-    <!-- Tesseract.js (распознавание текста с фото) -->
+    <!-- FontAwesome logotiplar va Tesseract.js kutubxonasi -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
     <style>
         body {
@@ -16,6 +17,9 @@
             display: flex;
             flex-direction: column;
             align-items: center;
+            min-height: 100vh;
+            box-sizing: border-box;
+            position: relative;
         }
         .container {
             max-width: 600px;
@@ -24,23 +28,25 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+            margin-bottom: 60px;
         }
-        h2 { text-align: center; color: #333; }
-        label { display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold; }
+        h2 { text-align: center; color: #333; margin-top: 0; }
+        label { display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold; color: #444; }
         textarea, select {
             width: 100%;
             padding: 10px;
             border: 1px solid #ccc;
             border-radius: 8px;
-            margin-bottom: 15px;
-            font-size: 16px;
+            margin-bottom: 12px;
+            font-size: 15px;
             box-sizing: border-box;
         }
-        textarea { height: 100px; }
-        input[type="file"] {
-            margin-bottom: 15px;
-            width: 100%;
+        textarea { height: 90px; }
+        .lang-group {
+            display: flex;
+            gap: 10px;
         }
+        .lang-group div { flex: 1; }
         button {
             background-color: #007bff;
             color: white;
@@ -50,21 +56,47 @@
             font-size: 16px;
             cursor: pointer;
             width: 100%;
-            margin-bottom: 10px;
             font-weight: bold;
+            margin-top: 5px;
         }
         button:hover { background-color: #0056b3; }
         .result-box {
             background: #f9f9f9;
-            padding: 15px;
+            padding: 12px;
             border-radius: 8px;
             border: 1px solid #ddd;
-            min-height: 50px;
-            margin-top: 10px;
+            min-height: 45px;
+            margin-top: 5px;
             word-break: break-word;
             font-size: 16px;
         }
-        #status { font-size: 14px; color: #666; text-align: center; margin-bottom: 10px; }
+        .phonetic-box {
+            font-style: italic;
+            color: #666;
+            font-size: 14px;
+            margin-top: 5px;
+        }
+        #status { font-size: 14px; color: #007bff; text-align: center; margin-bottom: 10px; }
+        
+        /* Instagram havola stili */
+        .instagram-link {
+            position: fixed;
+            bottom: 15px;
+            right: 15px;
+            background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-weight: bold;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            z-index: 1000;
+        }
+        .instagram-link:hover { opacity: 0.9; }
     </style>
 </head>
 <body>
@@ -72,28 +104,153 @@
     <div class="container">
         <h2>TezTranslate by Javohir 🚀</h2>
         
-        <!-- Загрузка фото -->
+        <!-- Rasm yuklash -->
         <label>Rasm yuklash yoki rasmga olish:</label>
         <input type="file" id="imageInput" accept="image/*">
         <p id="status"></p>
 
-        <!-- Выбор языка -->
-        <label>Qaysi tilga tarjima qilish kerak:</label>
-        <select id="targetLanguage">
-            <option value="uz">O'zbekcha</option>
-            <option value="en">English (Inglizcha)</option>
-            <option value="ru">Русский (Ruscha)</option>
-            <option value="tr">Türkçe (Turkcha)</option>
-            <option value="es">Español (Ispancha)</option>
-            <option value="fr">Français (Fransuzcha)</option>
-            <option value="de">Deutsch (Nemischa)</option>
-            <option value="ar">العربية (Arabcha)</option>
-            <option value="zh">中文 (Xitoycha)</option>
-            <option value="ja">日本語 (Japancha)</option>
-            <option value="ko">한국어 (Koreyscha)</option>
-            <option value="fa">فارسی (Forscha)</option>
-            <option value="hi">हिन्दी (Hindcha)</option>
-            <option value="ur">اردو (Urducha)</option>
-            <option value="it">Italiano (Italyancha)</option>
-            <option value="pt">Português (Portugalcha)</option>
-            <option value="kk">Қазақша (Qozoqcha)</option
+        <!-- Ikkita til menyusi (Manba va Nishon) -->
+        <div class="lang-group">
+            <div>
+                <label>Qaysi tildan:</label>
+                <select id="sourceLanguage">
+                    <option value="autodetect">Avto-aniqlash</option>
+                    <option value="uz">O'zbekcha</option>
+                    <option value="en">Inglizcha</option>
+                    <option value="ru">Ruscha</option>
+                    <option value="tr">Turkcha</option>
+                    <option value="es">Ispancha</option>
+                    <option value="fr">Fransuzcha</option>
+                    <option value="de">Nemischa</option>
+                    <option value="ar">Arabcha</option>
+                    <option value="zh">Xitoycha</option>
+                    <option value="ja">Japancha</option>
+                    <option value="ko">Koreyscha</option>
+                    <option value="kk">Qozoqcha</option>
+                    <option value="ky">Qirg'izcha</option>
+                    <option value="tg">Tojikcha</option>
+                </select>
+            </div>
+            <div>
+                <label>Qaysi tilga:</label>
+                <select id="targetLanguage">
+                    <option value="uz">O'zbekcha</option>
+                    <option value="en" selected>Inglizcha</option>
+                    <option value="ru">Ruscha</option>
+                    <option value="tr">Turkcha</option>
+                    <option value="es">Ispancha</option>
+                    <option value="fr">Fransuzcha</option>
+                    <option value="de">Nemischa</option>
+                    <option value="ar">Arabcha</option>
+                    <option value="zh">Xitoycha</option>
+                    <option value="ja">Japancha</option>
+                    <option value="ko">Koreyscha</option>
+                    <option value="kk">Qozoqcha</option>
+                    <option value="ky">Qirg'izcha</option>
+                    <option value="tg">Tojikcha</option>
+                    <option value="az">Ozarbayjoncha</option>
+                    <option value="uk">Ukraincha</option>
+                    <option value="pl">Polyakcha</option>
+                    <option value="it">Italyancha</option>
+                    <option value="pt">Portugalcha</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Matn kiritish -->
+        <label>Tarjima qilinadigan matn:</label>
+        <textarea id="sourceText" placeholder="Matn kiriting yoki rasm yuklang..."></textarea>
+        
+        <button onclick="translateText()">Tarjima qilish</button>
+
+        <!-- Natija -->
+        <label>Natija:</label>
+        <div class="result-box" id="resultText">Tarjima bu yerda chiqadi...</div>
+        <div class="phonetic-box" id="phoneticText"></div>
+
+        <!-- Ovozli o'qish -->
+        <button onclick="speakResult()" style="background-color: #28a745; margin-top: 12px;">🔊 Ovoz chiqarib o'qish</button>
+    </div>
+
+    <!-- Instagram logotipi va profil manzili -->
+    <a href="https://instagram.com/jokha.arm" target="_blank" class="instagram-link">
+        <i class="fa-brands fa-instagram" style="font-size: 18px;"></i> @jokha.arm
+    </a>
+
+    <script>
+        // Rasmdan matnni ajratish (OCR)
+        const imageInput = document.getElementById('imageInput');
+        const sourceText = document.getElementById('sourceText');
+        const status = document.getElementById('status');
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            status.innerText = "Rasm o'qilmoqda, kuting...";
+            sourceText.value = "";
+
+            Tesseract.recognize(
+                file,
+                'eng+uzb+rus', 
+                { 
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            status.innerText = `O'qilmoqda: ${Math.round(m.progress * 100)}%`;
+                        }
+                    }
+                }
+            ).then(({ data: { text } }) => {
+                status.innerText = "Muvaffaqiyatli o'qildi!";
+                sourceText.value = text.trim();
+            }).catch(err => {
+                status.innerText = "Rasmni o'qishda xatolik bo'ldi.";
+            });
+        });
+
+        // Tarjima qilish va o'qilishini chiqarish
+        async function translateText() {
+            let text = sourceText.value.trim();
+            let srcLang = document.getElementById('sourceLanguage').value;
+            let targetLang = document.getElementById('targetLanguage').value;
+            let resultBox = document.getElementById('resultText');
+            let phoneticBox = document.getElementById('phoneticText');
+
+            if (!text) {
+                alert("Iltimos, matn kiriting yoki rasm yuklang!");
+                return;
+            }
+
+            resultBox.innerText = "Tarjima qilinmoqda...";
+            phoneticBox.innerText = "";
+
+            try {
+                let langPair = srcLang === 'autodetect' ? `autodetect|${targetLang}` : `${srcLang}|${targetLang}`;
+                let response = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(text)}&langpair=${langPair}`);
+                let data = await response.json();
+
+                if (data.responseData && data.responseData.translatedText) {
+                    let translated = data.responseData.translatedText;
+                    resultBox.innerText = translated;
+                    
+                    // O'qilish (talaffuz) varianti
+                    phoneticBox.innerText = "O'qilishi: " + translated;
+                } else {
+                    resultBox.innerText = "Tarjima qilishda xatolik yuz berdi.";
+                }
+            } catch (error) {
+                resultBox.innerText = "Internet bilan bog'lanishda xatolik.";
+            }
+        }
+
+        // Ovozli o'qish
+        function speakResult() {
+            let textToSpeak = document.getElementById('resultText').innerText;
+            if (!textToSpeak || textToSpeak === "Tarjima bu yerda chiqadi..." || textToSpeak === "Tarjima qilinmoqda...") {
+                alert("O'qish uchun matn mavjud emas!");
+                return;
+            }
+            
+            let speech = new SpeechSynthesisUtterance(textToSpeak);
+            let targetLang = document.getElementById('targetLanguage').value;
+            speech.lang = targetLang === 'uz' ? 'uz-UZ' : (targetLang === 'en' ? 'en-US' : (targetLang === 'ru' ? 'ru-RU
