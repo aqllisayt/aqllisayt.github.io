@@ -1,216 +1,144 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"> <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="monetag" content="b5b294053f189c5c3f743f7a7b177b2f">
-<title>TezTranslate by Javohir</title> <title>TezTranslate by Javohir</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background-color: #f4f6f9;
-      margin: 0;
-      padding: 20px;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-    }
-    .container {
-      max-width: 600px;
-      width: 100%;
-      background: #ffffff;
-      padding: 20px;
-      border-radius: 12px;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-    }
-    h1 {
-      text-align: center;
-      color: #333;
-      font-size: 24px;
-      margin-bottom: 20px;
-    }
-    .lang-select {
-      display: flex;
-      gap: 10px;
-      margin-bottom: 15px;
-    }
-    select {
-      flex: 1;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 14px;
-    }
-    textarea {
-      width: 100%;
-      height: 120px;
-      padding: 10px;
-      border: 1px solid #ccc;
-      border-radius: 8px;
-      font-size: 16px;
-      box-sizing: border-box;
-      resize: vertical;
-      margin-bottom: 15px;
-    }
-    button {
-      width: 100%;
-      padding: 12px;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      cursor: pointer;
-      font-weight: bold;
-    }
-    button:hover {
-      background-color: #0056b3;
-    }
-    .result-box {
-      margin-top: 15px;
-      padding: 12px;
-      background: #eef2f5;
-      border-radius: 8px;
-      min-height: 50px;
-      font-size: 16px;
-      color: #222;
-      white-space: pre-wrap;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="monetag" content="b5b294053f189c5c3f743f7a7b177b2f">
+    <title>TezTranslate by Javohir</title>
+    <!-- Tesseract.js kutubxonasi (rasmdan matn o'qish uchun) -->
+    <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f9;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .container {
+            max-width: 600px;
+            width: 100%;
+            background: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+        }
+        h2 { text-align: center; color: #333; }
+        label { display: block; margin-top: 10px; margin-bottom: 5px; font-weight: bold; }
+        textarea, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            margin-bottom: 15px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+        textarea { height: 100px; }
+        input[type="file"] {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        button:hover { background-color: #0056b3; }
+        .result-box {
+            background: #f9f9f9;
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #ddd;
+            min-height: 50px;
+            margin-top: 10px;
+            word-break: break-word;
+        }
+        #status { font-size: 14px; color: #666; text-align: center; margin-bottom: 10px; }
+    </style>
 </head>
 <body>
 
-  <div class="container">
-    <h1>TezTranslate by Javohir</h1>
+    <div class="container">
+        <h2>TezTranslate 🚀</h2>
+        
+        <!-- Rasm yuklash qismi -->
+        <label>Rasm yuklash yoki rasmga olish:</label>
+        <input type="file" id="imageInput" accept="image/*">
+        <p id="status"></p>
 
-    <div class="lang-select">
-      <select id="sourceLang">
-        <option value="auto">Avto-aniqlash (Auto-detect)</option>
-        <option value="uz" selected>O'zbekcha</option>
-        <option value="en">Inglizcha (English)</option>
-        <option value="ru">Ruscha (Русский)</option>
-        <option value="tr">Turkcha (Türkçe)</option>
-        <option value="ar">Arabcha (العربية)</option>
-        <option value="zh-CN">Xitoycha (中文)</option>
-        <option value="es">Ispancha (Español)</option>
-        <option value="de">Nemischa (Deutsch)</option>
-        <option value="fr">Fransuzcha (Français)</option>
-        <option value="ko">Koreyscha (한국어)</option>
-        <option value="ja">Yaponcha (日本語)</option>
-        <option value="hi">Hindcha (Hindi)</option>
-        <option value="it">Italyancha (Italiano)</option>
-        <option value="pt">Portugalcha (Português)</option>
-        <option value="fa">Forscha (Persian)</option>
-        <option value="ur">Urducha</option>
-        <option value="bn">Bengali</option>
-        <option value="ms">Malaycha</option>
-        <option value="id">Indoneziyacha</option>
-        <option value="vi">Vyetnamcha</option>
-        <option value="th">Taycha</option>
-        <option value="pl">Polshacha</option>
-        <option value="nl">Gollandcha</option>
-        <option value="uk">Ukraincha</option>
-        <option value="kk">Qozoqcha</option>
-        <option value="ky">Qirg'izcha</option>
-        <option value="tg">Tojikcha</option>
-        <option value="tk">Turkmancha</option>
-        <option value="az">Ozarbayjoncha</option>
-        <option value="hy">Armancha</option>
-        <option value="ka">Gruzintcha</option>
-        <option value="he">Ivritcha</option>
-        <option value="el">Grekcha</option>
-        <option value="sv">Shvedcha</option>
-        <option value="no">Norvegcha</option>
-        <option value="fi">Fincha</option>
-        <option value="cs">Chexcha</option>
-        <option value="hu">Vengretcha</option>
-        <option value="ro">Rumincha</option>
-        <option value="bg">Bolgarcha</option>
-      </select>
+        <!-- 40+ tillar ro'yxati -->
+        <label>Qaysi tilga tarjima qilish kerak:</label>
+        <select id="targetLanguage">
+            <option value="uz">O'zbekcha</option>
+            <option value="en">English (Inglizcha)</option>
+            <option value="ru">Русский (Ruscha)</option>
+            <option value="tr">Türkçe (Turkcha)</option>
+            <option value="es">Español (Ispancha)</option>
+            <option value="fr">Français (Fransuzcha)</option>
+            <option value="de">Deutsch (Nemischa)</option>
+            <option value="ar">العربية (Arabcha)</option>
+            <option value="zh">中文 (Xitoycha)</option>
+            <option value="ja">日本語 (Japancha)</option>
+            <option value="ko">한국어 (Koreyscha)</option>
+            <option value="fa">فارسی (Forscha)</option>
+            <option value="hi">हिन्दी (Hindcha)</option>
+            <option value="ur">اردو (Urducha)</option>
+            <option value="it">Italiano (Italyancha)</option>
+            <option value="pt">Português (Portugalcha)</option>
+            <option value="kk">Қазақша ( Qozoqcha)</option>
+            <option value="ky">Кыргызча (Qirg'izcha)</option>
+            <option value="tg">Тоҷикӣ (Tojikcha)</option>
+            <option value="az">Azərbaycan (Ozarbayjoncha)</option>
+            <option value="uk">Українська (Ukraincha)</option>
+            <option value="pl">Polski (Polyakcha)</option>
+            <option value="nl">Nederlands (Gollandcha)</option>
+            <option value="el">Ελληνικά (Yunoncha)</option>
+            <option value="sv">Svenska (Shvedcha)</option>
+            <option value="no">Norsk (Norvegcha)</option>
+            <option value="fi">Suomi (Fincha)</option>
+            <option value="da">Dansk (Datcha)</option>
+            <option value="cs">Čeština (Chexcha)</option>
+            <option value="hu">Magyar (Vengercha)</option>
+            <option value="ro">Română (Rumincha)</option>
+            <option value="bg">Български (Bolgarcha)</option>
+            <option value="sr">Српски (Serbcha)</option>
+            <option value="hr">Hrvatski (Xorvatcha)</option>
+            <option value="sk">Slovenčina (Slovakcha)</option>
+            <option value="id">Bahasa Indonesia (Indonezcha)</option>
+            <option value="ms">Bahasa Melayu (Malaycha)</option>
+            <option value="vi">Tiếng Việt (Vyetnamcha)</option>
+            <option value="th">ไทย (Taycha)</option>
+            <option value="bn">বাংলা (Bengalcha)</option>
+            <option value="he">עברית (Ivrit)</option>
+        </select>
 
-      <select id="targetLang">
-        <option value="en" selected>Inglizcha (English)</option>
-        <option value="uz">O'zbekcha</option>
-        <option value="ru">Ruscha (Русский)</option>
-        <option value="tr">Turkcha (Türkçe)</option>
-        <option value="ar">Arabcha (العربية)</option>
-        <option value="zh-CN">Xitoycha (中文)</option>
-        <option value="es">Ispancha (Español)</option>
-        <option value="de">Nemischa (Deutsch)</option>
-        <option value="fr">Fransuzcha (Français)</option>
-        <option value="ko">Koreyscha (한국어)</option>
-        <option value="ja">Yaponcha (日本語)</option>
-        <option value="hi">Hindcha (Hindi)</option>
-        <option value="it">Italyancha (Italiano)</option>
-        <option value="pt">Portugalcha (Português)</option>
-        <option value="fa">Forscha (Persian)</option>
-        <option value="ur">Urducha</option>
-        <option value="bn">Bengali</option>
-        <option value="ms">Malaycha</option>
-        <option value="id">Indoneziyacha</option>
-        <option value="vi">Vyetnamcha</option>
-        <option value="th">Taycha</option>
-        <option value="pl">Polshacha</option>
-        <option value="nl">Gollandcha</option>
-        <option value="uk">Ukraincha</option>
-        <option value="kk">Qozoqcha</option>
-        <option value="ky">Qirg'izcha</option>
-        <option value="tg">Tojikcha</option>
-        <option value="tk">Turkmancha</option>
-        <option value="az">Ozarbayjoncha</option>
-        <option value="hy">Armancha</option>
-        <option value="ka">Gruzintcha</option>
-        <option value="he">Ivritcha</option>
-        <option value="el">Grekcha</option>
-        <option value="sv">Shvedcha</option>
-        <option value="no">Norvegcha</option>
-        <option value="fi">Fincha</option>
-        <option value="cs">Chexcha</option>
-        <option value="hu">Vengretcha</option>
-        <option value="ro">Rumincha</option>
-        <option value="bg">Bolgarcha</option>
-      </select>
+        <!-- Matn kiritish qismi -->
+        <label>Tarjima qilinadigan matn:</label>
+        <textarea id="sourceText" placeholder="Matnni kiriting yoki rasmdan o'qing..."></textarea>
+        
+        <button onclick="translateText()">Tarjima qilish</button>
+
+        <!-- Natija qismi -->
+        <label>Natija:</label>
+        <div class="result-box" id="resultText">Tarjima bu yerda chiqadi...</div>
+
+        <!-- Ovoz bilan o'qish tugmasi -->
+        <button onclick="speakResult()" style="background-color: #28a745; margin-top: 15px;">🔊 Ovoz chiqarib o'qish</button>
     </div>
 
-    <!-- Xato to'g'irlandi: "buring" o'rniga "kiriting" yozildi -->
-    <textarea id="inputText" placeholder="Matnni kiriting..."></textarea>
-    <button onclick="translateText()">Tarjima qilish</button>
+    <script>
+        // Rasm yuklanganda matnni avtomatik o'qib olish (OCR)
+        const imageInput = document.getElementById('imageInput');
+        const sourceText = document.getElementById('sourceText');
+        const status = document.getElementById('status');
 
-    <div class="result-box" id="outputText">Tarjima bu yerda chiqadi...</div>
-  </div>
-
-  <script>
-    async function translateText() {
-      const text = document.getElementById('inputText').value;
-      const source = document.getElementById('sourceLang').value;
-      const target = document.getElementById('targetLang').value;
-      const output = document.getElementById('outputText');
-
-      if (!text.trim()) {
-        output.innerText = "Iltimos, matn kiriting!";
-        return;
-      }
-
-      output.innerText = "Tarjima qilinmoqda...";
-
-      try {
-        const res = await fetch(`https://translate.googleapis.com/translate_a/single?client=gtx&sl=${source}&tl=${target}&dt=t&q=${encodeURIComponent(text)}`);
-        const data = await res.json();
-        
-        // Ba'zida tarjima bir nechta qismga bo'linib kelishi mumkin, ularni to'liq birlashtirish:
-        let translatedText = "";
-        if (data && data[0]) {
-          data[0].forEach(item => {
-            if (item[0]) translatedText += item[0];
-          });
-        }
-        
-        output.innerText = translatedText || "Tarjima topilmadi.";
-      } catch (error) {
-        output.innerText = "Xatolik yuz berdi. Qayta urinib ko'ring.";
-      }
-    }
-  </script>
-
-</body>
-</html>
+        imageInput.addEventListener('change', (e) => {
