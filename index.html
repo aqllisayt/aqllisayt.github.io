@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="monetag" content="b5b294053f189c5c3f743f7a7b177b2f">
     <title>TezTranslate by Javohir</title>
+    <!-- FontAwesome logotiplar va Tesseract.js kutubxonasi -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://cdn.jsdelivr.net/npm/tesseract.js@v5/dist/tesseract.min.js"></script>
     <style>
@@ -18,6 +19,7 @@
             align-items: center;
             min-height: 100vh;
             box-sizing: border-box;
+            position: relative;
         }
         .container {
             max-width: 600px;
@@ -26,7 +28,7 @@
             padding: 20px;
             border-radius: 12px;
             box-shadow: 0 4px 10px rgba(0,0,0,0.1);
-            margin-bottom: 60px;
+            margin-bottom: 70px;
             box-sizing: border-box;
         }
         h2 { text-align: center; color: #333; margin-top: 0; }
@@ -101,10 +103,12 @@
     <div class="container">
         <h2>TezTranslate by Javohir 🚀</h2>
         
+        <!-- Rasm yuklash -->
         <label>Rasm yuklash yoki rasmga olish:</label>
         <input type="file" id="imageInput" accept="image/*">
         <p id="status"></p>
 
+        <!-- Ikkita til tanlash menyusi (40+ tillar) -->
         <div class="lang-group">
             <div>
                 <label>Qaysi tildan:</label>
@@ -117,4 +121,192 @@
                     <option value="es">Ispancha</option>
                     <option value="fr">Fransuzcha</option>
                     <option value="de">Nemischa</option>
-                    <option value="ar">
+                    <option value="ar">Arabcha</option>
+                    <option value="zh">Xitoycha</option>
+                    <option value="ja">Japancha</option>
+                    <option value="ko">Koreyscha</option>
+                    <option value="fa">Forscha</option>
+                    <option value="hi">Hindcha</option>
+                    <option value="ur">Urducha</option>
+                    <option value="it">Italyancha</option>
+                    <option value="pt">Portugalcha</option>
+                    <option value="kk">Qozoqcha</option>
+                    <option value="ky">Qirg'izcha</option>
+                    <option value="tg">Tojikcha</option>
+                    <option value="az">Ozarbayjoncha</option>
+                    <option value="uk">Ukraincha</option>
+                    <option value="pl">Polyakcha</option>
+                    <option value="nl">Gollandcha</option>
+                    <option value="el">Yunoncha</option>
+                    <option value="sv">Shvedcha</option>
+                    <option value="no">Norvegcha</option>
+                    <option value="fi">Fincha</option>
+                    <option value="da">Datcha</option>
+                    <option value="cs">Chexcha</option>
+                    <option value="hu">Vengercha</option>
+                    <option value="ro">Rumincha</option>
+                    <option value="bg">Bolgarcha</option>
+                    <option value="sr">Serbcha</option>
+                    <option value="hr">Xorvatcha</option>
+                    <option value="sk">Slovakcha</option>
+                    <option value="id">Indonezcha</option>
+                    <option value="ms">Malaycha</option>
+                    <option value="vi">Vyetnamcha</option>
+                    <option value="th">Taycha</option>
+                    <option value="bn">Bengalcha</option>
+                    <option value="he">Ivrit</option>
+                </select>
+            </div>
+            <div>
+                <label>Qaysi tilga:</label>
+                <select id="targetLanguage">
+                    <option value="en">Inglizcha</option>
+                    <option value="uz">O'zbekcha</option>
+                    <option value="ru">Ruscha</option>
+                    <option value="tr">Turkcha</option>
+                    <option value="es">Ispancha</option>
+                    <option value="fr">Fransuzcha</option>
+                    <option value="de">Nemischa</option>
+                    <option value="ar">Arabcha</option>
+                    <option value="zh">Xitoycha</option>
+                    <option value="ja">Japancha</option>
+                    <option value="ko">Koreyscha</option>
+                    <option value="fa">Forscha</option>
+                    <option value="hi">Hindcha</option>
+                    <option value="ur">Urducha</option>
+                    <option value="it">Italyancha</option>
+                    <option value="pt">Portugalcha</option>
+                    <option value="kk">Qozoqcha</option>
+                    <option value="ky">Qirg'izcha</option>
+                    <option value="tg">Tojikcha</option>
+                    <option value="az">Ozarbayjoncha</option>
+                    <option value="uk">Ukraincha</option>
+                    <option value="pl">Polyakcha</option>
+                    <option value="nl">Gollandcha</option>
+                    <option value="el">Yunoncha</option>
+                    <option value="sv">Shvedcha</option>
+                    <option value="no">Norvegcha</option>
+                    <option value="fi">Fincha</option>
+                    <option value="da">Datcha</option>
+                    <option value="cs">Chexcha</option>
+                    <option value="hu">Vengercha</option>
+                    <option value="ro">Rumincha</option>
+                    <option value="bg">Bolgarcha</option>
+                    <option value="sr">Serbcha</option>
+                    <option value="hr">Xorvatcha</option>
+                    <option value="sk">Slovakcha</option>
+                    <option value="id">Indonezcha</option>
+                    <option value="ms">Malaycha</option>
+                    <option value="vi">Vyetnamcha</option>
+                    <option value="th">Taycha</option>
+                    <option value="bn">Bengalcha</option>
+                    <option value="he">Ivrit</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Matn kiritish -->
+        <label>Tarjima qilinadigan matn:</label>
+        <textarea id="sourceText" placeholder="Matn kiriting yoki rasm yuklang..."></textarea>
+        
+        <button onclick="translateText()">Tarjima qilish</button>
+
+        <!-- Natija -->
+        <label>Natija:</label>
+        <div class="result-box" id="resultText">Tarjima bu yerda chiqadi...</div>
+        <div class="phonetic-box" id="phoneticText"></div>
+
+        <!-- Ovozli o'qish -->
+        <button onclick="speakResult()" style="background-color: #28a745; margin-top: 12px;">🔊 Ovoz chiqarib o'qish</button>
+    </div>
+
+    <!-- Instagram havola -->
+    <a href="https://instagram.com/jokha.arm" target="_blank" class="instagram-link">
+        <i class="fa-brands fa-instagram"></i> @jokha.arm
+    </a>
+
+    <script>
+        // OCR (Rasmdan matn o'qish)
+        const imageInput = document.getElementById('imageInput');
+        const sourceText = document.getElementById('sourceText');
+        const status = document.getElementById('status');
+
+        imageInput.addEventListener('change', (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            status.innerText = "Rasm o'qilmoqda, kuting...";
+            sourceText.value = "";
+
+            Tesseract.recognize(
+                file,
+                'eng+uzb+rus', 
+                { 
+                    logger: m => {
+                        if (m.status === 'recognizing text') {
+                            status.innerText = `O'qilmoqda: ${Math.round(m.progress * 100)}%`;
+                        }
+                    }
+                }
+            ).then(({ data: { text } }) => {
+                status.innerText = "Muvaffaqiyatli o'qildi!";
+                sourceText.value = text.trim();
+            }).catch(err => {
+                status.innerText = "Rasmni o'qishda xatolik bo'ldi.";
+            });
+        });
+
+        // Google Translate API orqali tarjima
+        async function translateText() {
+            let text = sourceText.value.trim();
+            let srcLang = document.getElementById('sourceLanguage').value;
+            let targetLang = document.getElementById('targetLanguage').value;
+            let resultBox = document.getElementById('resultText');
+            let phoneticBox = document.getElementById('phoneticText');
+
+            if (!text) {
+                alert("Iltimos, matn kiriting yoki rasm yuklang!");
+                return;
+            }
+
+            resultBox.innerText = "Tarjima qilinmoqda...";
+            phoneticBox.innerText = "";
+
+            try {
+                let url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${srcLang}&tl=${targetLang}&dt=t&q=${encodeURIComponent(text)}`;
+                let response = await fetch(url);
+                let data = await response.json();
+
+                if (data && data[0]) {
+                    let translatedText = "";
+                    data[0].forEach(item => {
+                        if (item[0]) translatedText += item[0];
+                    });
+                    
+                    resultBox.innerText = translatedText;
+                    phoneticBox.innerText = "O'qilishi: " + translatedText;
+                } else {
+                    resultBox.innerText = "Tarjimada xatolik bo'ldi.";
+                }
+            } catch (error) {
+                resultBox.innerText = "Internetda xatolik yoki tarjima olinmadi.";
+            }
+        }
+
+        // Ovozli o'qish
+        function speakResult() {
+            let textToSpeak = document.getElementById('resultText').innerText;
+            if (!textToSpeak || textToSpeak === "Tarjima bu yerda chiqadi..." || textToSpeak === "Tarjima qilinmoqda...") {
+                alert("O'qish uchun matn mavjud emas!");
+                return;
+            }
+            
+            let speech = new SpeechSynthesisUtterance(textToSpeak);
+            let targetLang = document.getElementById('targetLanguage').value;
+            speech.lang = targetLang === 'uz' ? 'uz-UZ' : (targetLang === 'en' ? 'en-US' : (targetLang === 'ru' ? 'ru-RU' : targetLang));
+            window.speechSynthesis.speak(speech);
+        }
+    </script>
+
+</body>
+</html>
