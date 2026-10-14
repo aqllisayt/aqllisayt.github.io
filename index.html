@@ -2,119 +2,224 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1">
 <title>TezTranslate by Javohir</title>
 <style>
-  * { box-sizing: border-box; }
-  body {
-    margin: 0;
-    padding: 16px;
-    font-family: -apple-system, Arial, sans-serif;
-    background: #f4f6fb;
-    color: #222;
-  }
-  .card {
-    background: #fff;
-    max-width: 520px;
-    margin: 0 auto;
-    padding: 22px;
-    border-radius: 20px;
-    box-shadow: 0 4px 16px rgba(0,0,0,0.08);
-  }
-  h1 { text-align: center; font-size: 24px; margin: 4px 0 20px; }
-  label { display: block; font-weight: bold; margin: 14px 0 8px; font-size: 16px; }
-  .row { display: flex; gap: 12px; }
-  .row > div { flex: 1; }
-  select, textarea {
-    width: 100%;
-    font-size: 17px;
-    padding: 12px;
-    border: 1.5px solid #ccc;
-    border-radius: 12px;
-    background: #f1f1f1;
-  }
-  select { height: 52px; }
-  textarea { background: #fff; min-height: 110px; resize: vertical; font-family: inherit; }
-  #result {
-    min-height: 90px;
-    padding: 14px;
-    border: 1.5px solid #ccc;
-    border-radius: 12px;
-    background: #fafafa;
-    font-size: 18px;
-    white-space: pre-wrap;
-  }
-  button {
-    width: 100%;
-    border: 0;
-    color: #fff;
-    font-size: 19px;
-    font-weight: bold;
-    padding: 16px;
-    border-radius: 14px;
-    margin-top: 16px;
-  }
-  #translateBtn { background: #0057b8; }
-  #speakBtn { background: #28a745; }
-  button:disabled { opacity: 0.6; }
-  #status { margin-top: 8px; font-size: 14px; color: #666; min-height: 18px; }
-  .social {
-    max-width: 520px;
-    margin: 16px auto 8px;
-    display: flex;
-    gap: 12px;
-  }
-  .social a {
-    flex: 1;
-    text-align: center;
-    color: #fff;
-    text-decoration: none;
-    font-weight: bold;
-    padding: 14px 10px;
-    border-radius: 30px;
-    font-size: 17px;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.2);
-  }
-  .insta { background: linear-gradient(45deg, #f09433, #e6683c, #dc2743, #cc2366, #bc1888); }
-  .tg { background: #229ed9; }
+*{box-sizing:border-box}
+body{margin:0;padding:16px;font-family:-apple-system,Arial,sans-serif;background:#f4f6fb;color:#222}
+.card{background:#fff;max-width:520px;margin:0 auto;padding:22px;border-radius:20px;box-shadow:0 4px 16px #0001}
+h1{text-align:center;font-size:24px;margin:4px 0 20px}
+label{display:block;font-weight:bold;margin:14px 0 8px}
+.row{display:flex;gap:10px}.row>div{flex:1}
+select,textarea{width:100%;font-size:17px;padding:12px;border:1.5px solid #ccc;border-radius:12px;background:#f1f1f1}
+select{height:52px}
+textarea{background:#fff;min-height:110px;font-family:inherit}
+#cnt{text-align:right;font-size:13px;color:#888;margin-top:4px}
+#result{min-height:90px;padding:14px;border:1.5px solid #ccc;border-radius:12px;background:#fafafa;font-size:18px;white-space:pre-wrap}
+button{width:100%;border:0;color:#fff;font-size:19px;font-weight:bold;padding:16px;border-radius:14px;margin-top:16px}
+button:disabled{opacity:.6}
+#tb{background:#0057b8}
+#sb{background:#28a745}
+#cp{background:#6c757d;font-size:16px;padding:12px;margin-top:10px}
+#sw{flex:0 0 44px;width:44px;height:52px;padding:0;margin:0;align-self:flex-end;background:#e4e4e4;color:#222;border-radius:12px;font-size:20px}
+#st{margin-top:8px;font-size:14px;color:#666;min-height:18px}
+.soc{max-width:520px;margin:16px auto;display:flex;gap:12px}
+.soc a{flex:1;text-align:center;color:#fff;text-decoration:none;padding:12px 8px;border-radius:30px;line-height:1.3;box-shadow:0 3px 10px #0003}
+.soc b{display:block;font-size:17px}
+.soc small{font-size:14px}
+.ig{background:linear-gradient(45deg,#f09433,#dc2743,#bc1888)}
+.tg{background:#229ed9}
 </style>
 </head>
 <body>
 <div class="card">
-  <h1>TezTranslate by Javohir 🚀</h1>
-
-  <label for="imageInput">Rasm yuklash yoki rasmga olish:</label>
-  <input type="file" id="imageInput" accept="image/*">
-
-  <div class="row">
-    <div>
-      <label for="fromLang">Qaysi tildan:</label>
-      <select id="fromLang"></select>
-    </div>
-    <div>
-      <label for="toLang">Qaysi tilga:</label>
-      <select id="toLang"></select>
-    </div>
-  </div>
-
-  <label for="inputText">Tarjima qilinadigan matn:</label>
-  <textarea id="inputText" placeholder="Matn yozing..."></textarea>
-
-  <button id="translateBtn">Tarjima qilish</button>
-  <div id="status"></div>
-
-  <label>Natija:</label>
-  <div id="result"></div>
-
-  <button id="speakBtn">🔊 Ovoz chiqarib o'qish</button>
+<h1>TezTranslate by Javohir 🚀</h1>
+<label>Rasm yuklash yoki rasmga olish:</label>
+<input type="file" id="im" accept="image/*">
+<div class="row">
+<div><label>Qaysi tildan:</label><select id="f"></select></div>
+<button id="sw" type="button">⇄</button>
+<div><label>Qaysi tilga:</label><select id="t"></select></div>
 </div>
-
-<div class="social">
-  <a class="insta" href="https://instagram.com/jokha.arm" target="_blank" rel="noopener">📷 Instagram</a>
-  <a class="tg" href="https://t.me/ii7jb" target="_blank" rel="noopener">✈️ Telegram</a>
+<label>Tarjima qilinadigan matn:</label>
+<textarea id="x" placeholder="Matn yozing..."></textarea>
+<div id="cnt">0 belgi</div>
+<button id="tb">Tarjima qilish</button>
+<div id="st"></div>
+<label>Natija:</label>
+<div id="result"></div>
+<button id="cp">📋 Nusxalash</button>
+<button id="sb">🔊 Ovoz chiqarib o'qish</button>
 </div>
-
+<div class="soc">
+<a class="ig" href="https://instagram.com/jokha.arm" target="_blank"><b>Instagram</b><small>@jokha.arm</small></a>
+<a class="tg" href="https://t.me/ii7jb" target="_blank"><b>Telegram</b><small>@ii7jb</small></a>
+</div>
 <script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+var LANGS=[
+["uz","O'zbekcha","uzb","uz-UZ"],["en","Inglizcha","eng","en-US"],["ru","Ruscha","rus","ru-RU"],
+["tr","Turkcha","tur","tr-TR"],["ar","Arabcha","ara","ar-SA"],["kk","Qozoqcha","kaz","kk-KZ"],
+["ko","Koreyscha","kor","ko-KR"],["zh-CN","Xitoycha","chi_sim","zh-CN"],["de","Nemischa","deu","de-DE"],
+["fr","Fransuzcha","fra","fr-FR"],["es","Ispancha","spa","es-ES"],["it","Italyancha","ita","it-IT"],
+["ja","Yaponcha","jpn","ja-JP"],["hi","Hindcha","hin","hi-IN"],["fa","Forscha","fas","fa-IR"],
+["tg","Tojikcha","tgk","tg-TJ"],["ky","Qirg'izcha","kir","ky-KG"],["az","Ozarbayjoncha","aze","az-AZ"],
+["pt","Portugalcha","por","pt-PT"],["uk","Ukrainacha","ukr","uk-UA"]
+];
+var detected="",CACHE={};
+var $=function(i){return document.getElementById(i)};
+var F=$("f"),T=$("t"),X=$("x"),R=$("result"),S=$("st"),B=$("tb");
+function info(c){return LANGS.filter(function(l){return l[0]===c})[0]}
+function enc(x){return encodeURIComponent(x)}
+function short(c){return c==="auto"?"auto":(c==="zh-CN"?"zh":c)}
 
+async function getJson(u){
+  var c=new AbortController();
+  var m=setTimeout(function(){c.abort()},8000);
+  try{
+    var r=await fetch(u,{signal:c.signal});
+    if(!r.ok)throw new Error("http");
+    return await r.json();
+  }finally{clearTimeout(m)}
+}
+function lingva(host){
+  return async function(x,f,t){
+    var d=await getJson(host+"/api/v1/"+short(f)+"/"+short(t)+"/"+enc(x));
+    if(!d.translation)throw new Error("bosh");
+    return d.translation;
+  };
+}
+var SRC=[
+  async function(x,f,t){
+    var d=await getJson("https://translate.googleapis.com/translate_a/single?client=gtx&dt=t&sl="+f+"&tl="+t+"&q="+enc(x));
+    if(f==="auto"&&d[2])detected=d[2];
+    return d[0].map(function(a){return a[0]}).join("");
+  },
+  async function(x,f,t){
+    var d=await getJson("https://clients5.google.com/translate_a/t?client=dict-chrome-ex&sl="+f+"&tl="+t+"&q="+enc(x));
+    if(d.sentences)return d.sentences.map(function(s){return s.trans||""}).join("");
+    if(Array.isArray(d))return d.map(function(a){return Array.isArray(a)?a[0]:a}).join("");
+    throw new Error("format");
+  },
+  async function(x,f,t){
+    var d=await getJson("https://translate.googleapis.com/translate_a/t?client=gtx&dt=t&sl="+f+"&tl="+t+"&q="+enc(x));
+    if(Array.isArray(d))return d.map(function(a){return Array.isArray(a)?a[0]:a}).join("");
+    throw new Error("format");
+  },
+  lingva("https://lingva.ml"),
+  lingva("https://lingva.lunar.icu"),
+  lingva("https://translate.plausibility.cloud"),
+  async function(x,f,t){
+    var s=f==="auto"?detected:f;
+    if(!s)throw new Error("til yo'q");
+    var d=await getJson("https://api.mymemory.translated.net/get?q="+enc(x)+"&langpair="+s+"|"+t);
+    var r=d.responseData;
+    if(!r||!r.translatedText||!(Number(r.match)>=0.85))throw new Error("ishonchsiz");
+    return r.translatedText;
+  }
+];
+async function tryPart(x,f,t){
+  for(var i=0;i<SRC.length;i++){
+    try{
+      var o=await SRC[i](x,f,t);
+      if(o&&o.trim())return o;
+    }catch(e){}
+  }
+  throw new Error("hech biri ishlamadi");
+}
+function chunks(line,n){
+  var p=[],c="";
+  (line.match(/[^.!?]+[.!?]*\s*/g)||[line]).forEach(function(s){
+    if((c+s).length>n&&c){p.push(c);c=""}
+    while(s.length>n){p.push(s.slice(0,n));s=s.slice(n)}
+    c+=s;
+  });
+  if(c.trim())p.push(c);
+  return p;
+}
+async function translateText(text,f,t){
+  var key=f+"|"+t+"|"+text;
+  if(CACHE[key])return CACHE[key];
+  var lines=text.split("\n"),out=[];
+  for(var i=0;i<lines.length;i++){
+    if(!lines[i].trim()){out.push("");continue}
+    var parts=chunks(lines[i],500),res=[];
+    for(var j=0;j<parts.length;j++)res.push((await tryPart(parts[j],f,t)).trim());
+    out.push(res.join(" "));
+  }
+  var r=out.join("\n");
+  CACHE[key]=r;
+  return r;
+}
 
+F.add(new Option("Avtomatik aniqlash","auto"));
+LANGS.forEach(function(l){F.add(new Option(l[1],l[0]));T.add(new Option(l[1],l[0]))});
+try{
+  F.value=localStorage.getItem("tf")||"uz";
+  T.value=localStorage.getItem("tt")||"en";
+}catch(e){}
+if(!F.value)F.value="uz";
+if(!T.value)T.value="en";
+function save(){try{localStorage.setItem("tf",F.value);localStorage.setItem("tt",T.value)}catch(e){}}
+F.onchange=save;
+T.onchange=save;
+X.oninput=function(){$("cnt").textContent=X.value.length+" belgi"};
 
+$("sw").onclick=function(){
+  var f=F.value,t=T.value;
+  if(f==="auto")f=detected||"en";
+  F.value=t;T.value=f;
+  if(!F.value)F.value="uz";
+  if(!T.value)T.value="en";
+  if(R.textContent.trim()){X.value=R.textContent;R.textContent="";X.oninput()}
+  save();
+};
+B.onclick=async function(){
+  var x=X.value.trim(),f=F.value,t=T.value;
+  if(!x){S.textContent="Avval matn yozing.";return}
+  if(f===t){R.textContent=x;S.textContent="";return}
+  B.disabled=true;
+  S.textContent="Tarjima qilinmoqda...";
+  R.textContent="";
+  try{
+    R.textContent=await translateText(x,f,t);
+    S.textContent="";
+  }catch(e){
+    S.textContent="Tarjima qilib bo'lmadi. Internetni tekshirib, qayta urinib ko'ring.";
+  }
+  B.disabled=false;
+};
+$("cp").onclick=async function(){
+  var s=R.textContent.trim();
+  if(!s){S.textContent="Nusxalash uchun avval tarjima qiling.";return}
+  try{await navigator.clipboard.writeText(s);S.textContent="Nusxalandi ✅"}
+  catch(e){S.textContent="Nusxalab bo'lmadi. Natijani bosib turib belgilang."}
+};
+$("im").onchange=async function(e){
+  var file=e.target.files[0];
+  if(!file)return;
+  var ocr=F.value==="auto"?"uzb+eng+rus":info(F.value)[2];
+  S.textContent="Rasmdan matn o'qilmoqda... (biroz kuting)";
+  try{
+    var r=await Tesseract.recognize(file,ocr);
+    var s=(r.data.text||"").trim();
+    if(s){X.value=s;X.oninput();S.textContent="Matn o'qildi. Endi «Tarjima qilish» ni bosing."}
+    else S.textContent="Rasmdan matn topilmadi. Aniqroq rasm tanlang.";
+  }catch(err){S.textContent="Rasmni o'qib bo'lmadi. Qayta urinib ko'ring."}
+};
+$("sb").onclick=function(){
+  var s=R.textContent.trim();
+  if(!s){S.textContent="Avval tarjima qiling.";return}
+  if(!window.speechSynthesis){S.textContent="Bu brauzer ovozni qo'llamaydi.";return}
+  var lang=info(T.value)[3],base=lang.split("-")[0];
+  var voices=speechSynthesis.getVoices().filter(function(v){return v.lang.indexOf(base)===0});
+  if(base==="uz"&&!voices.length){S.textContent="Telefoningizda o'zbekcha ovoz yo'q. Boshqa tilda sinab ko'ring.";return}
+  speechSynthesis.cancel();
+  var u=new SpeechSynthesisUtterance(s);
+  u.lang=lang;
+  if(voices.length)u.voice=voices[0];
+  speechSynthesis.speak(u);
+};
+</script>
+</body>
+</html>
